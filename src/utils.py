@@ -6,37 +6,29 @@ threshold2 = 255
 #create a function that generate 5 thresholded images with different thresholds
 # puts them in a grid add text with values and show the grid
 def generate_thresholded_images(image):
-    #convert to 3 channel gray 
-    # TODO - This is not the best way to convert to 3 channel
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-    #create a grid with 5 images
-    grid_image = np.zeros((gray.shape[0]*2, gray.shape[1]*3, 3), dtype=np.uint8)
+
+    grid_image = np.zeros((image.shape[0]*2, image.shape[1]*3, 3), dtype=np.uint8)
     #create a list of thresholds
     thresholds = [10, 20, 30, 40, 50]
     #create a list of names for the images
-    #use list comprehension to create the names
-    
     names = [f'Threshold: {threshold}' for threshold in thresholds]
-    names.insert(0, 'Gray')
+    names.insert(0, 'Original')
     #create a list of the images
-    images = [gray]
+    images = [image]
     for threshold in thresholds:
         # Apply a binary threshold to the image
-        _, thresholded = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+        _, thresholded = cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)
         images.append(thresholded)
     #add the images to the grid
     for i in range(6):
         x = i%3
         y = i//3
-        grid_image[y*gray.shape[0]:(y+1)*gray.shape[0], x*gray.shape[1]:(x+1)*gray.shape[1], :] = images[i]
+        grid_image[y*image.shape[0]:(y+1)*image.shape[0], x*image.shape[1]:(x+1)*image.shape[1], :] = images[i]
         #add the text to the images
-        cv2.putText(grid_image, names[i], (x*gray.shape[1]+10, y*gray.shape[0]+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-    #show the grid
+        cv2.putText(grid_image, names[i], (x*image.shape[1]+10, y*image.shape[0]+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
     #resize the grid image
     grid_image = cv2.resize(grid_image, (0,0), fx=0.4, fy=0.4)
     cv2.imshow('Thresholded Images', grid_image)
-
 
 #a function that finds the 5 biggest contours
 def find_biggest_contours(image, num_contours=5):

@@ -5,9 +5,8 @@ import os
 
 image_name = 'finger_2.jpg'
 resource_folder = 'resources'
+
 image_path = os.path.join(resource_folder, image_name)
-
-
 image = cv2.imread(image_path, cv2.IMREAD_COLOR)
 
 if image is None:
