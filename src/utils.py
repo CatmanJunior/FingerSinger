@@ -1,7 +1,42 @@
 import cv2
 import numpy as np
-threshold1 = 40
+threshold1 = 30
 threshold2 = 255
+
+#create a function that generate 5 thresholded images with different thresholds
+# puts them in a grid add text with values and show the grid
+def generate_thresholded_images(image):
+    #convert to 3 channel gray 
+    # TODO - This is not the best way to convert to 3 channel
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+    #create a grid with 5 images
+    grid_image = np.zeros((gray.shape[0]*2, gray.shape[1]*3, 3), dtype=np.uint8)
+    #create a list of thresholds
+    thresholds = [10, 20, 30, 40, 50]
+    #create a list of names for the images
+    #use list comprehension to create the names
+    
+    names = [f'Threshold: {threshold}' for threshold in thresholds]
+    names.insert(0, 'Gray')
+    #create a list of the images
+    images = [gray]
+    for threshold in thresholds:
+        # Apply a binary threshold to the image
+        _, thresholded = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+        images.append(thresholded)
+    #add the images to the grid
+    for i in range(6):
+        x = i%3
+        y = i//3
+        grid_image[y*gray.shape[0]:(y+1)*gray.shape[0], x*gray.shape[1]:(x+1)*gray.shape[1], :] = images[i]
+        #add the text to the images
+        cv2.putText(grid_image, names[i], (x*gray.shape[1]+10, y*gray.shape[0]+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+    #show the grid
+    #resize the grid image
+    grid_image = cv2.resize(grid_image, (0,0), fx=0.4, fy=0.4)
+    cv2.imshow('Thresholded Images', grid_image)
+
 
 #a function that finds the 5 biggest contours
 def find_biggest_contours(image, num_contours=5):
@@ -12,10 +47,10 @@ def find_biggest_contours(image, num_contours=5):
     contours, _ = cv2.findContours(thresholded, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     #sort the contours by area
     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:num_contours]
-    return contours
+    return thresholded, contours
 
-def find_center(image):
-    contours = find_biggest_contours(image, 10)
+def find_center(contours):
+
     # Initialize max x and y coordinates
     max_x = max_y = 0
     print(len(contours))
@@ -29,8 +64,8 @@ def find_center(image):
             max_y = max(max_y, y)
     return (max_x, max_y)
 
-def find_center_avg(image):
-    contours = find_biggest_contours(image, 10)
+def find_center_avg(contours):
+    
     # Initialize total x and y coordinates
     total_x = total_y = num_contours = 0
     print(len(contours))
