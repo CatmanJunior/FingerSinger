@@ -2,18 +2,20 @@ import cv2
 import numpy as np
 threshold1 = 40
 threshold2 = 255
-def find_center(image):
+
+#a function that finds the 5 biggest contours
+def find_biggest_contours(image, num_contours=5):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # Apply a binary threshold to the image
     _, thresholded = cv2.threshold(image, threshold1, threshold2, cv2.THRESH_BINARY)
-    cv2.imshow('Thresholded1', thresholded)
     # Find contours in the thresholded image
     contours, _ = cv2.findContours(thresholded, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    #copy the image
-    image_copy = image.copy()
-    #show the contours
-    cv2.drawContours(image_copy, contours, -1, (127, 255, 0), 3)
-    cv2.imshow('Contours1', image_copy)
+    #sort the contours by area
+    contours = sorted(contours, key=cv2.contourArea, reverse=True)[:num_contours]
+    return contours
 
+def find_center(image):
+    contours = find_biggest_contours(image, 10)
     # Initialize max x and y coordinates
     max_x = max_y = 0
     print(len(contours))
@@ -28,14 +30,7 @@ def find_center(image):
     return (max_x, max_y)
 
 def find_center_avg(image):
-    # Apply a binary threshold to the image
-    _, thresholded = cv2.threshold(image, threshold1, threshold2, cv2.THRESH_BINARY)
-    contours, img = cv2.findContours(thresholded, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    #copy the image
-    image_copy = image.copy()
-    #show the contours
-    con = cv2.drawContours(image_copy, contours, -1, (127, 255, 0), 3)
-    cv2.imshow('Contours2', image_copy)
+    contours = find_biggest_contours(image, 10)
     # Initialize total x and y coordinates
     total_x = total_y = num_contours = 0
     print(len(contours))
