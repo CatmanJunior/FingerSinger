@@ -27,7 +27,6 @@ def generate_thresholded_images(image):
         #add the text to the images
         cv2.putText(grid_image, names[i], (x*image.shape[1]+10, y*image.shape[0]+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
     #resize the grid image
-    grid_image = cv2.resize(grid_image, (0,0), fx=0.4, fy=0.4)
     cv2.imshow('Thresholded Images', grid_image)
 
 #a function that finds the 5 biggest contours
