@@ -6,7 +6,7 @@ import numpy as np
 
 # Load the fingerprint image
 image_name = 'finger_2.jpg'
-resource_folder = 'resources'
+resource_folder = 'FingerSinger\\resources'
 
 image_path = os.path.join(resource_folder, image_name)
 image = cv2.imread(image_path, cv2.IMREAD_COLOR)

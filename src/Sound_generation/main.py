@@ -52,8 +52,8 @@ if __name__ == "__main__":
     #plot mixed_wave
     plot_waveform(mixed_wave, sample_rate, "Mixed Wave")
     
-    # play_wave(sine_wave)
-    # play_wave(square_wave)
+    play_wave(sine_wave)
+    play_wave(square_wave)
     # # play_wave(sawtooth_wave)
     # play_wave(noisy_sine_wave)
     # play_wave(filtered_wave)

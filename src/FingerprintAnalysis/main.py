@@ -5,7 +5,7 @@ from add_ui import *
 import os
 
 image_name = '600__M_Right_index_finger.BMP'
-resource_folder = 'resources\SOCOFing\SOCOFing\Real'
+resource_folder = 'FingerSinger\\resources\\SOCOFing\\SOCOFing\\Real'
 
 image_path = os.path.join(resource_folder, image_name)
 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
